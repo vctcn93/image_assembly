@@ -3,15 +3,10 @@ import configparser
 import os, sys, re
 from lib.couple import Couple
 from lib.config import Config
-from lib.cv2_converter import CV2Converter
-from lib.pil_converter import PILConverter
-from lib.sk_converter import SKConverter
+from lib.converter import Converter
 
-# 修正器选择
-# converter = CV2Converter
-# converter = PILConverter
-converter = SKConverter
 
+converter = Converter
 config = configparser.ConfigParser()
 configs = None
 couples = None
@@ -72,11 +67,9 @@ def set_configs(project_path) -> list:
     configs = [Config(key, value) for key, value in config._sections.items()]
 
 
-def main():
+def parse():
     global couples
     global configs
-
-    load_project()
 
     for i, couple in enumerate(couples):
         for config in configs:
@@ -84,6 +77,11 @@ def main():
             print('overed 1 config...')
         couple.export()
         print('%50s' % '>>> Finished',  i+1, 'Couple. >>>')
+
+
+def main():
+    load_project()
+    parse()
 
 
 if __name__ == '__main__':
